@@ -1,0 +1,140 @@
+Boğaz köprülerinden geçiş yapan araçlardaki OGS cihazlarının yazılımını yazmanız isteniyor. Buna göre araçların OGS kayıtlarının tutulması sırasında bir OGS numarası, sahibinin ismi ve soy ismi, aracın sınıfı (1. Sınıf: otomobil, 2. Sınıf: minibüs, 3. Sınıf: otobüs), geçiş yaptığı tarih ve saat bilgileri, bakiyesi gibi bilgileri tutacak ve aşağıdaki istenenleri karşılayacaksınız (60 puan).
+
+a.      Nesne yönelimli tasarımı Java dilinde kodlayınız. Tasarımınız sırasında her araç sınıfı için ayrı bir sınıf (class) tanımı yapınız.
+
+b.      Tasarımınıza, ödeme kabul eden fonksiyonu olan bir gişe sınıfı ekleyiniz. Bu fonksiyon, bütün araç sınıflarını kabul eden ve ilgili araç sınıfına göre bakiyeyi azaltan tek bir fonksiyon olsun.
+
+c.       OGS yönetimi  için raporlama yapmanız isteniyor. Gişe sınıfının, günlük olarak geçen araçları bir dizide (array) tutmasını sağlayınız. Yönetim için yeni bir sınıf yazıp, istenildiğinde elde edilen toplam günlük bakiyeyi ekrana basan bir fonksiyon kodlayınız.
+
+d.      Araçların OGS kullanabilmesi için mutlaka OGS cihazının bulunmasını sağlayan nesne yönelimli tasarımı yapınız. Şayet OGS cihazı bulunmayan bir araç, gişelerden geçmeye çalışırsa, nesne yönelimli olarak hata veriniz.
+
+ 
+CEVAP:
+
+interface OGSBulundurur{
+
+    int odeme();
+
+}
+
+abstract class OGSvasita implements OGSBulundurur{
+
+    int bakiye ;
+
+    int ucret;
+
+    public int odeme(){
+
+        bakiye -= ucret;
+
+        return bakiye;
+
+    }
+
+}
+
+class otomobil extends OGSvasita{
+
+    public otomobil(){
+
+        ucret = 3 ;
+
+    }
+
+}
+
+ 
+
+class minibus extends OGSvasita{
+
+    public minibus(){
+
+        ucret = 4 ;
+
+    }
+
+}
+
+class otobus extends OGSvasita{
+
+    public otobus(){
+
+        ucret = 5 ;
+
+    }
+
+}
+
+class gise{
+
+    OGSBulundurur liste[];
+
+    int i ;
+
+    public gise(){
+
+        liste = new OGSBulundurur[ 20 ];
+
+        i= 0 ;
+
+    }
+
+    void odemeAl(OGSBulundurur v){
+
+        liste[i++] = v;
+
+        v.odeme();
+
+    }
+
+}
+
+class yonetim{
+
+    public void raporla(gise g){
+
+        int toplam = 0 ;
+
+        for ( int i = 0 ;i<g.i;i++){
+
+            System.out.println(((OGSvasita)g.liste[i]).ucret);
+
+             toplam += (((OGSvasita)g.liste[i]).ucret);
+
+        }
+
+        System.out.println( “—– n Toplam : “ + toplam);
+
+    }
+
+}
+
+public class testogs{
+
+    public static void main(String args[]){
+
+        otobus o = new otobus();
+
+        o.bakiye = 100 ;
+
+        gise g = new gise();
+
+        g.odemeAl(o);
+
+        otomobil oto = new otomobil();
+
+        oto.bakiye = 70 ;
+
+        g.odemeAl(oto);
+
+        g.odemeAl(o);
+
+        yonetim y = new yonetim();
+
+        y.raporla(g);
+
+    }
+
+}
+
+ 
